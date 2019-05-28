@@ -13,6 +13,7 @@
 		<module>sso-api</module>
 		<module>sso-sdk</module>
 		<module>sso-server</module>
+        <module>sso-demo</module>
 	</modules>
 
 	<properties>
@@ -47,7 +48,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter</artifactId>
+				<artifactId>spring-boot-starter-web</artifactId>
 				<version>${spring-boot.version}</version>
 			</dependency>
 			<dependency>
