@@ -7,7 +7,7 @@ package lewiszlw.sso.sdk.constant;
  * @date 2019-05-28
  */
 public enum HandleResult {
-    ALLOW,
+    ALLOW, UNAUTHORIZED,
 
 
 }

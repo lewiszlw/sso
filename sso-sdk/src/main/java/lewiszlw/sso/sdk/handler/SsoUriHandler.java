@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 public interface SsoUriHandler {
     /**
      * uri处理器
-     * @return false: 处理器内部处理，: 放行
+     * @return false: 处理器内部处理，true: 放行
      */
-    boolean handle(String uri, HttpServletRequest req, HttpServletResponse resp);
+    boolean handle(HttpServletRequest req, HttpServletResponse resp);
 }

@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletResponse;
  * @author zhanglinwei02
  * @date 2019-05-28
  */
-public class LogoutSsoUriHandler implements SsoUriHandler {
+public class AllowSsoUriHandler implements SsoUriHandler {
 
     public boolean handle(HttpServletRequest req, HttpServletResponse resp) {
-        return false;
+        return true;
     }
 }

@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletResponse;
  * Desc:
  *
  * @author zhanglinwei02
- * @date 2019-05-28
+ * @date 2019-05-29
  */
-public class LogoutSsoUriHandler implements SsoUriHandler {
+public class CallbackSsoUriHandler implements SsoUriHandler {
 
     public boolean handle(HttpServletRequest req, HttpServletResponse resp) {
         return false;
