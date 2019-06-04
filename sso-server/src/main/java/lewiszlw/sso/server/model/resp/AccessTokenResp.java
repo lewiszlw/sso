@@ -1,7 +1,7 @@
 package lewiszlw.sso.server.model.resp;
 
-import lewiszlw.sso.server.constant.TokenType;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * Desc:
@@ -10,17 +10,13 @@ import lombok.Data;
  * @date 2019-05-29
  */
 @Data
+@Accessors(chain = true)
 public class AccessTokenResp {
 
     /**
      * 访问令牌
      */
     private String accessToken;
-
-    /**
-     * 令牌类型
-     */
-    private TokenType tokenType;
 
     /**
      * 过期时间（秒）

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="lewiszlw.sso.server.mapper.OAuthAppMapper" >
+
+    <resultMap id="baseResultMap" type="lewiszlw.sso.server.entity.OAuthAppEntity">
+        <id column="id" property="id"/>
+        <result column="app_name" property="appName"/>
+        <result column="app_url" property="appUrl" />
+        <result column="app_desc" property="appDesc"/>
+        <result column="app_callback_url" property="appCallbackUrl"/>
+        <result column="client_id" property="clientId"/>
+        <result column="client_secret" property="clientSecret"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+    </resultMap>
+
+    <sql id="baseColumns" >
+        app_name, app_url, app_desc, app_callback_url, client_id, client_secret, created_time, updated_time
+    </sql>
+
+    <insert id="insertOne" parameterType="lewiszlw.sso.server.entity.OAuthAppEntity">
+        insert into sso_oauth_app
+        (<include refid="baseColumns" />)
+        values
+        (
+        #{oauthAppEntity.appName},
+        #{oauthAppEntity.appUrl},
+        #{oauthAppEntity.appDesc},
+        #{oauthAppEntity.appCallbackUrl},
+        #{oauthAppEntity.clientId},
+        #{oauthAppEntity.clientSecret},
+        now(),
+        now()
+        )
+    </insert>
+
+    <select id="selectByClientId" parameterType="java.lang.String" resultMap="baseResultMap">
+        select * from sso_oauth_app
+        where client_id = #{clientId}
+    </select>
+
+</mapper>

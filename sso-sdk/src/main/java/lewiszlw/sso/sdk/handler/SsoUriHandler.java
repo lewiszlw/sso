@@ -1,5 +1,7 @@
 package lewiszlw.sso.sdk.handler;
 
+import lewiszlw.sso.sdk.constant.HandleResult;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 public interface SsoUriHandler {
     /**
      * uri处理器
-     * @return false: 处理器内部处理，true: 放行
      */
-    boolean handle(HttpServletRequest req, HttpServletResponse resp);
+    HandleResult handle(HttpServletRequest req, HttpServletResponse resp) throws Exception;
 }

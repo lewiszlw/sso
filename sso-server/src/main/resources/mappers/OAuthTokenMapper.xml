@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="lewiszlw.sso.server.mapper.OAuthTokenMapper" >
+
+    <resultMap id="baseResultMap" type="lewiszlw.sso.server.entity.OAuthTokenEntity">
+        <id column="id" property="id"/>
+        <result column="client_id" property="clientId" />
+        <result column="type" property="type" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result column="token" property="token" />
+        <result column="expired_at" property="expiredAt"/>
+        <result column="status" property="status"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+    </resultMap>
+
+    <sql id="baseColumns" >
+        client_id, `type`, token, expired_at, status, created_time, updated_time
+    </sql>
+
+    <insert id="insertOne" parameterType="lewiszlw.sso.server.entity.OAuthTokenEntity">
+        insert into sso_oauth_token
+        (<include refid="baseColumns" />)
+        values
+        (
+        #{oauthTokenEntity.clientId},
+        #{oauthTokenEntity.type, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
+        #{oauthTokenEntity.token},
+        #{oauthTokenEntity.expiredAt},
+        #{oauthTokenEntity.status},
+        now(),
+        now()
+        )
+    </insert>
+
+    <select id="selectByTokenAndType" resultMap="baseResultMap">
+        select * from sso_oauth_token
+        where token = #{token}
+        and `type` = #{type, typeHandler=org.apache.ibatis.type.EnumTypeHandler}
+        and status = 1
+    </select>
+
+    <update id="updateStatusInvalid" >
+        update sso_oauth_token
+        set
+        status = 0,
+        updated_time = now()
+        where token = #{token}
+    </update>
+
+</mapper>

@@ -1,6 +1,7 @@
 package lewiszlw.sso.server.model.resp;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * Desc:
@@ -9,6 +10,7 @@ import lombok.Data;
  * @date 2019-05-29
  */
 @Data
+@Accessors(chain = true)
 public class RegisterAppResp {
 
     /**

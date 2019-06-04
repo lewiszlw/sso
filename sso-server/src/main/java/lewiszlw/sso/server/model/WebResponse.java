@@ -31,4 +31,8 @@ public class WebResponse {
     public static final int STATUS_OK = 200;
     public static final int STATUS_BAD_REQUEST = 400;
 
+    public static WebResponse createOKWebResponse(Object data) {
+        return new WebResponse().setStatus(STATUS_OK).setMessage("请求成功").setData(data);
+    }
+
 }

@@ -1,5 +1,6 @@
 package lewiszlw.sso.sdk.handler.impl;
 
+import lewiszlw.sso.sdk.constant.HandleResult;
 import lewiszlw.sso.sdk.handler.SsoUriHandler;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class AllowSsoUriHandler implements SsoUriHandler {
 
-    public boolean handle(HttpServletRequest req, HttpServletResponse resp) {
-        return true;
+    public HandleResult handle(HttpServletRequest req, HttpServletResponse resp) {
+        return HandleResult.AUTHORIZED;
     }
 }

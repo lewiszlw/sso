@@ -1,6 +1,7 @@
 package lewiszlw.sso.server.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.Date;
 
@@ -11,7 +12,8 @@ import java.util.Date;
  * @date 2019-05-29
  */
 @Data
-public class OauthAppEntity {
+@Accessors(chain = true)
+public class OAuthAppEntity {
 
     private Integer id;
 

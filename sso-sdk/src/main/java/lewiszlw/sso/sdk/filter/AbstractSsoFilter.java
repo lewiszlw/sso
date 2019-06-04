@@ -1,6 +1,7 @@
 package lewiszlw.sso.sdk.filter;
 
 import lewiszlw.sso.sdk.config.SsoConfiguration;
+import lewiszlw.sso.sdk.constant.HandleResult;
 import lewiszlw.sso.sdk.handler.SsoUriHandler;
 import lewiszlw.sso.sdk.listener.SsoListener;
 
@@ -23,15 +24,28 @@ public abstract class AbstractSsoFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
+        // 分发SsoUriHandler来处理
         SsoUriHandler ssoUriHandler = dispatch(request, response);
-        if (ssoUriHandler.handle(request, response)) {
-            filterChain.doFilter(servletRequest, servletResponse);
+        HandleResult handleResult = null;
+        try {
+            handleResult = ssoUriHandler.handle(request, response);
+        } catch (Exception e) {
+            // TODO
+            e.printStackTrace();
         }
-        // TODO 解绑user
-
+        switch (handleResult) {
+            case AUTHORIZED:
+                // 已验证通过，转给业务处理
+                filterChain.doFilter(servletRequest, servletResponse);
+                break;
+            case UNAUTHORIZED:
+                break;
+        }
+        // 在 servlet 请求结束前,清空 UserUtils 中的登录用户缓存
+        // TODO
     }
 
-    public abstract SsoUriHandler dispatch(HttpServletRequest request, HttpServletResponse response);
+    protected abstract SsoUriHandler dispatch(HttpServletRequest request, HttpServletResponse response);
 
     public void init(FilterConfig filterConfig) throws ServletException {}
 
