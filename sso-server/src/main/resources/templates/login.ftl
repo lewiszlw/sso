@@ -9,7 +9,8 @@
     <input name="username" type="text" placeholder="Username"
            autofocus="true"/>
     <input name="password" type="password" placeholder="Password"/>
-    <input name="redirectUri" type="text" hidden value="${RequestParameters.redirect_uri!}" />
+    <input name="redirectUri" type="text" hidden value="${redirectUri!}" />
+    <input name="clientId" type="text" hidden value="${clientId!}" />
     <div>(try username=hellokoding and password=hellokoding)</div>
     <div style="color: red">${error!}</div>
     <br/>

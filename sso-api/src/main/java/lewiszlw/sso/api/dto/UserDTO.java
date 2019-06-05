@@ -1,4 +1,4 @@
-package lewiszlw.sso.api.vo;
+package lewiszlw.sso.api.dto;
 
 /**
  * Desc:
@@ -6,7 +6,7 @@ package lewiszlw.sso.api.vo;
  * @author zhanglinwei02
  * @date 2019-06-04
  */
-public class UserVO {
+public class UserDTO {
 
     private String name;
 

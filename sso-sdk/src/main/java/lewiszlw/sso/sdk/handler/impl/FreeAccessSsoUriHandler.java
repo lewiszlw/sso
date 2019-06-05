@@ -7,14 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Desc:
+ * Desc: 无需验证，直接放行
  *
  * @author zhanglinwei02
  * @date 2019-05-28
  */
-public class AllowSsoUriHandler implements SsoUriHandler {
+public class FreeAccessSsoUriHandler implements SsoUriHandler {
 
+    @Override
     public HandleResult handle(HttpServletRequest req, HttpServletResponse resp) {
-        return HandleResult.AUTHORIZED;
+        return HandleResult.FREE_ACCESS;
     }
 }

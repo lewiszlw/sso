@@ -1,6 +1,8 @@
 package lewiszlw.sso.server.controller;
 
 import lewiszlw.sso.server.model.req.LoginReq;
+import lewiszlw.sso.server.service.OAuthSerivce;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,15 +19,20 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/sso")
 public class SsoController {
 
+    @Autowired
+    private OAuthSerivce oauthSerivce;
+
     /**
      * 登录页面
      */
     @RequestMapping(value = "/login")
-    public ModelAndView login(@RequestParam("redirect_uri") String redirectUri) {
+    public ModelAndView login(@RequestParam(value = "redirect_uri", required = false) String redirectUri,
+                              @RequestParam(value = "client_id", required = false) String clientId) {
         // 验证redirectUri
         // TODO
         ModelAndView modelAndView = new ModelAndView("/login");
-        modelAndView.addObject("redirect_uri", redirectUri);
+        modelAndView.addObject("redirectUri", redirectUri);
+        modelAndView.addObject("clientId", clientId);
         return modelAndView;
     }
 
@@ -36,10 +43,14 @@ public class SsoController {
     public ModelAndView login(@ModelAttribute LoginReq req, HttpServletResponse response) {
         // 验证账号密码
         // TODO
-        if (StringUtils.isEmpty(req.getRedirectUri())) {
+        if (StringUtils.isEmpty(req.getClientId()) || StringUtils.isEmpty(req.getRedirectUri())) {
             return new ModelAndView("/login_success");
         } else {
-            return new ModelAndView("redirect:" + req.getRedirectUri());
+            String code = oauthSerivce.genCode(req.getClientId());
+            String redirectUri = req.getRedirectUri();
+            // TODO 判断是否加?code
+            redirectUri += "&code=" + code;
+            return new ModelAndView("redirect:" + redirectUri);
         }
     }
 

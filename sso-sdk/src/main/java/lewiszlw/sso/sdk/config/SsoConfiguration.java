@@ -21,6 +21,10 @@ public class SsoConfiguration {
 
     private String logoutUri = "/sso/logout";
 
+    private String serviceImpl = "http";
+
+    private String appSimpleName;
+
     private static final SsoConfiguration instance = new SsoConfiguration();
     public static SsoConfiguration getInstance() {
         return instance;
@@ -76,5 +80,21 @@ public class SsoConfiguration {
 
     public void setLogoutUri(String logoutUri) {
         this.logoutUri = logoutUri;
+    }
+
+    public String getServiceImpl() {
+        return serviceImpl;
+    }
+
+    public void setServiceImpl(String serviceImpl) {
+        this.serviceImpl = serviceImpl;
+    }
+
+    public String getAppSimpleName() {
+        return appSimpleName;
+    }
+
+    public void setAppSimpleName(String appSimpleName) {
+        this.appSimpleName = appSimpleName;
     }
 }

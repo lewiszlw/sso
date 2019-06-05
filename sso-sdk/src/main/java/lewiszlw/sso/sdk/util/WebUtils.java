@@ -4,7 +4,18 @@ import lewiszlw.sso.sdk.config.SsoConfiguration;
 import lewiszlw.sso.sdk.constant.Constants;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import static org.springframework.web.util.WebUtils.INCLUDE_CONTEXT_PATH_ATTRIBUTE;
 
@@ -16,40 +27,42 @@ import static org.springframework.web.util.WebUtils.INCLUDE_CONTEXT_PATH_ATTRIBU
  */
 public class WebUtils {
 
+    public static final String GMT_TIME_ZONE_ID = "GMT";
+    public static final String COOKIE_DATE_FORMAT_STRING = "EEE, dd-MMM-yyyy HH:mm:ss z";
+
     /**
      * 生成登录url
      */
-    public static String genLoginUrL(HttpServletRequest request) {
+    public static String genLoginUrL(HttpServletRequest request) throws UnsupportedEncodingException {
         SsoConfiguration ssoConfiguration = SsoConfiguration.getInstance();
-        // TODO
-        // url编码
         return Constants.SSO_LOGIN_URI
-                + "?redirect_uri=" + genCallbackUrl(request)
+                + "?redirect_uri=" + URLEncoder.encode(genCallbackUrl(request), "utf-8")
                 + "&client_id=" + ssoConfiguration.getClientId();
     }
 
     /**
      * 生成回调url
-     * 包含本次请求url
      */
     public static String genCallbackUrl(HttpServletRequest request) {
         // 加上origin_url 拼接 回调url
-        String fullHost = getFullHost(request);
-        return fullHost + Constants.RESERVE_CALLBACK_URI
-                + "?origin_url=" + getOriginUrl(request);
-    }
-
-    public static String getOriginUrl(HttpServletRequest request) {
-        // TODO
-        // 原始访问url
-        return request.getRequestURL().toString();
-    }
-
-    public static String getFullHost(HttpServletRequest request) {
-        String schema = getSchema(request);
+        String protocal = getProtocal(request);
         String host = getHost(request);
         String webContext = getContextPath(request);
-        return schema + "://" + host + webContext;
+        // TODO 实际上还要考虑 Nginx rewriteLocation
+        return protocal + "://" + host + webContext + Constants.RESERVE_CALLBACK_URI
+                + "?origin_url=" + genOriginUrl(request);
+    }
+
+    /**
+     * 生成本次用户请求的url (origin_url)
+     */
+    public static String genOriginUrl(HttpServletRequest request) {
+        String queryString = request.getQueryString();
+        if (StringUtils.isEmpty(queryString)) {
+            return request.getRequestURL().toString();
+        } else {
+            return request.getRequestURL().toString() + "?" + queryString;
+        }
     }
 
     public static String getHost(HttpServletRequest request) {
@@ -72,12 +85,53 @@ public class WebUtils {
         return contextPath;
     }
 
-    public static String getSchema(HttpServletRequest request) {
-        String schema = request.getHeader("X-Forwarded-Proto");
-        if (!"http".equals(schema) && !"https".equals(schema)) {
+    /**
+     * 获取协议 (默认http)
+     */
+    public static String getProtocal(HttpServletRequest request) {
+        String protocal = request.getHeader("X-Forwarded-Proto");
+        if (!"http".equals(protocal) && !"https".equals(protocal)) {
             // 默认http
-            schema = "http";
+            protocal = "http";
         }
-        return schema;
+        return protocal;
+    }
+
+    /**
+     * 设置cookie
+     */
+    public static void setCookie(HttpServletResponse response, String name, String value, int maxAge, boolean httpOnly) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(name).append("=").append(value).append(";");
+        sb.append("Max-Age=").append(maxAge).append(";");
+        if (maxAge <= 0) {
+            sb.append("Expires=Thu Jan 01 08:00:00 CST 1970;");
+        } else {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.SECOND, maxAge);
+            Date expires = cal.getTime();
+
+            TimeZone tz = TimeZone.getTimeZone(GMT_TIME_ZONE_ID);
+            DateFormat fmt = new SimpleDateFormat(COOKIE_DATE_FORMAT_STRING, Locale.US);
+            fmt.setTimeZone(tz);
+            sb.append("Expires=" + fmt.format(expires)).append(";");
+        }
+        sb.append("path=").append("/").append(";");
+        if (httpOnly) {
+            sb.append("HTTPOnly;");
+        }
+        response.addHeader("Set-Cookie", sb.toString());
+    }
+
+    public static Cookie getCookie(HttpServletRequest request, String cookieName) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(cookieName)) {
+                    return cookie;
+                }
+            }
+        }
+        return null;
     }
 }

@@ -1,8 +1,6 @@
 package lewiszlw.sso.sdk.util;
 
-import lewiszlw.sso.api.vo.UserVO;
-
-import java.util.Map;
+import lewiszlw.sso.api.dto.UserDTO;
 
 /**
  * Desc:
@@ -12,7 +10,7 @@ import java.util.Map;
  */
 public class UserUtils {
 
-    private static ThreadLocal<UserVO> threadLocal = new ThreadLocal<UserVO>();
+    private static ThreadLocal<UserDTO> threadLocal = new ThreadLocal<UserDTO>();
 
     public static void getUser() {
 

@@ -9,11 +9,7 @@ import lewiszlw.sso.api.dto.UserDTO;
  * @author zhanglinwei02
  * @date 2019-05-31
  */
-public interface SsoDubboService {
-
-    void logout();
-
-    boolean validateToken();
+public interface RemoteSsoService {
 
     AccessTokenDTO getAccessToken(String code);
 

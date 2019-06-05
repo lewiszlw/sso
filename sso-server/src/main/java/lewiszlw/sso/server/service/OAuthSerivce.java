@@ -45,10 +45,10 @@ public class OAuthSerivce {
         // 生成access token 和 refresh token
         String accessToken = TokenUtils.createAccessToken();
         OAuthTokenEntity accessOAuthTokenEntity = OAuthTokenConverter
-                .convertToOAuthTokenEntity(OAuthTokenType.ACCESS_TOKEN, accessToken, req.getClientId(), Constants.STATUS_VALID);
+                .convertToOAuthTokenEntity(OAuthTokenType.ACCESS_TOKEN, req.getClientId(), accessToken, Constants.STATUS_VALID);
         String refreshToken = TokenUtils.createRefreshToken();
         OAuthTokenEntity refreshOAuthTokenEntity = OAuthTokenConverter
-                .convertToOAuthTokenEntity(OAuthTokenType.REFRESH_TOKEN, refreshToken, req.getClientId(), Constants.STATUS_VALID);
+                .convertToOAuthTokenEntity(OAuthTokenType.REFRESH_TOKEN, req.getClientId(), refreshToken, Constants.STATUS_VALID);
         oauthTokenMapper.insertOne(accessOAuthTokenEntity);
         oauthTokenMapper.insertOne(refreshOAuthTokenEntity);
         // 过期code

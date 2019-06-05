@@ -7,16 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Desc: 未验证，需登录
+ * Desc: 已验证
  *
  * @author zhanglinwei02
- * @date 2019-06-04
+ * @date 2019-06-05
  */
-public class LoginSsoUriHandler implements SsoUriHandler {
+public class AuthorizedSsoUriHandler implements SsoUriHandler {
 
     @Override
     public HandleResult handle(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-        // 跳转到sso 登录页面
-        return HandleResult.REDIRECT_TO_LOGIN;
+        return HandleResult.AUTHORIZED;
     }
 }

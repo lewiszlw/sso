@@ -40,6 +40,7 @@ public class SsoFilterConfiguration {
         OAuthSsoFilter oAuthSsoFilter = new OAuthSsoFilter();
         oAuthSsoFilter.setClientId("39932b59-c9f1-461d-af98-b287bd8d4798");
         oAuthSsoFilter.setClientSecret("3c1d49c0-11ea-4579-9e38-d462d42af4d5");
+        oAuthSsoFilter.setAppSimpleName("app1");
         return oAuthSsoFilter;
     }
 

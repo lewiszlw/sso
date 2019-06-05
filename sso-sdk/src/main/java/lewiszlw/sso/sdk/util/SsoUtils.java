@@ -59,4 +59,9 @@ public class SsoUtils {
         }
         return false;
     }
+
+    public static String genCookieName() {
+        SsoConfiguration ssoConfiguration = SsoConfiguration.getInstance();
+        return ssoConfiguration.getAppSimpleName() + "_sso_token";
+    }
 }
