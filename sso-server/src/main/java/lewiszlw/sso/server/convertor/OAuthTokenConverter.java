@@ -2,6 +2,7 @@ package lewiszlw.sso.server.convertor;
 
 import lewiszlw.sso.server.constant.Constants;
 import lewiszlw.sso.server.constant.OAuthTokenType;
+import lewiszlw.sso.server.constant.TokenStatus;
 import lewiszlw.sso.server.entity.OAuthTokenEntity;
 import lewiszlw.sso.server.util.DateUtils;
 
@@ -13,15 +14,16 @@ import lewiszlw.sso.server.util.DateUtils;
  */
 public class OAuthTokenConverter {
 
-    public static OAuthTokenEntity convertToOAuthTokenEntity(OAuthTokenType type,
-                                                             String clientId,
-                                                             String token,
-                                                             Integer status) {
+    public static OAuthTokenEntity convertToValidOAuthTokenEntity(String clientId,
+                                                             Integer userId,
+                                                             OAuthTokenType type,
+                                                             String token) {
         OAuthTokenEntity oAuthTokenEntity = new OAuthTokenEntity()
                 .setClientId(clientId)
+                .setUserId(userId)
                 .setToken(token)
                 .setType(type)
-                .setStatus(status);
+                .setStatus(TokenStatus.VALID.getStatus());
         switch (type) {
             case CODE:
                 oAuthTokenEntity.setExpiredAt(DateUtils.genExpiredDate(Constants.CODE_VALID_TIME));
@@ -33,7 +35,7 @@ public class OAuthTokenConverter {
                 oAuthTokenEntity.setExpiredAt(DateUtils.genExpiredDate(Constants.REFRESH_TOKEN_VALID_TIME));
                 break;
             default:
-                throw new IllegalArgumentException("type 错误");
+                throw new IllegalArgumentException("OAuthTokenType 错误");
         }
         return oAuthTokenEntity;
     }

@@ -23,12 +23,12 @@ public class Constants {
 
 
     /**
-     * token 状态：无效
+     * sso站点登录状态access token的cookie名称
      */
-    public static final int STATUS_INVALID = 0;
+    public static final String SSO_LOGIN_ACCESS_TOKEN_COOKIE_NAME = "sso_access_token";
 
     /**
-     * token 状态：有效
+     * request header中携带的access token
      */
-    public static final int STATUS_VALID = 1;
+    public static final String ACCESS_TOKEN_HEADER_NAME = "access-token";
 }

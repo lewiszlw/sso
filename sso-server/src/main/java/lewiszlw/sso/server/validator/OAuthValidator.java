@@ -1,6 +1,7 @@
 package lewiszlw.sso.server.validator;
 
 import com.google.common.base.Preconditions;
+import lewiszlw.sso.server.constant.OAuthTokenType;
 import lewiszlw.sso.server.entity.OAuthAppEntity;
 import lewiszlw.sso.server.model.ValidationResult;
 import lewiszlw.sso.server.model.req.AccessTokenReq;
@@ -55,7 +56,7 @@ public class OAuthValidator {
             OAuthAppEntity oAuthAppEntity = oauthAppService.queryByClientId(req.getClientId());
             Preconditions.checkArgument(Objects.nonNull(oAuthAppEntity), "client id 不正确");
             Preconditions.checkArgument(oAuthAppEntity.getClientSecret().equals(req.getClientSecret()), "client secret 不正确");
-            Preconditions.checkArgument(oAuthSerivce.validateCode(req.getCode()), "code 过期");
+            Preconditions.checkArgument(oAuthSerivce.validateToken(req.getCode(), OAuthTokenType.CODE).isPass(), "code 过期");
 
             return ValidationResult.createPassValidationResult();
         } catch (IllegalArgumentException e) {

@@ -45,4 +45,12 @@ public class RemoteSsoServiceProxy implements RemoteSsoService {
         }
         return httpImpl.getUser(accessToken);
     }
+
+    @Override
+    public boolean validateAccessToken(String accessToken) {
+        if (Constants.DUBBO_SERVICE_IMPL.equals(ssoConfiguration.getServiceImpl())) {
+            return dubboImpl.validateAccessToken(accessToken);
+        }
+        return httpImpl.validateAccessToken(accessToken);
+    }
 }

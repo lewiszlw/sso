@@ -54,8 +54,8 @@ public class OAuthController {
             response.setStatus(400);
             return;
         }
-        String code = oauthSerivce.genCode(clientId);
         // TODO 判断用户是否登录
+        String code = oauthSerivce.genCode(clientId, -1);
         // 303 Found
         response.sendRedirect(WebUtils.generateRedirectUri(redirectUri, code, state));
     }

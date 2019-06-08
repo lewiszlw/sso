@@ -31,4 +31,9 @@ public class RemoteSsoServiceDubboImpl implements RemoteSsoService {
     public UserDTO getUser(String accessToken) {
         return ssoDubboService.getUser(accessToken);
     }
+
+    @Override
+    public boolean validateAccessToken(String accessToken) {
+        return ssoDubboService.validateAccessToken(accessToken);
+    }
 }

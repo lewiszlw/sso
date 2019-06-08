@@ -1,22 +1,17 @@
-package lewiszlw.sso.server.entity;
+package lewiszlw.sso.server.model.vo;
 
 import lombok.Data;
-
-import java.util.Date;
+import lombok.experimental.Accessors;
 
 /**
  * Desc:
  *
  * @author zhanglinwei02
- * @date 2019-05-29
+ * @date 2019-06-06
  */
 @Data
-public class UserEntity {
-
-    /**
-     * user id
-     */
-    private Integer id;
+@Accessors(chain = true)
+public class UserVO {
 
     /**
      * 用户名称
@@ -37,14 +32,4 @@ public class UserEntity {
      * 住址
      */
     private String address;
-
-    /**
-     * 创建时间
-     */
-    private Date createdTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updatedTime;
 }

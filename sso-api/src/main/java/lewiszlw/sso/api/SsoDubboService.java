@@ -13,11 +13,11 @@ public interface SsoDubboService {
 
     void logout();
 
-    boolean validateToken();
-
     AccessTokenDTO getAccessToken(String code);
 
     AccessTokenDTO refreshAccessToken(String refreshToken);
 
     UserDTO getUser(String accessToken);
+
+    boolean validateAccessToken(String accessToken);
 }

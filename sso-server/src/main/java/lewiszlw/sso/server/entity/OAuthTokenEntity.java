@@ -24,6 +24,11 @@ public class OAuthTokenEntity {
     private String clientId;
 
     /**
+     * 授权用户id
+     */
+    private Integer userId;
+
+    /**
      * token 类型
      */
     private OAuthTokenType type;

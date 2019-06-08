@@ -5,7 +5,8 @@
 </head>
 <body>
 <div align="center">
-    <h2>Login Successful!</h2>
+    <h2>Error!</h2>
+    <p>${error!}</p>
 </div>
 </body>
 </html>

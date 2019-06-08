@@ -17,12 +17,18 @@ public class ValidationResult {
 
     private String message;
 
+    private Object data;
+
     public WebResponse transformWebResponse(Integer status) {
         return new WebResponse().setStatus(status).setMessage(message);
     }
 
     public static ValidationResult createPassValidationResult() {
         return new ValidationResult().setPass(true).setMessage("验证通过");
+    }
+
+    public static ValidationResult createPassValidationResult(Object data) {
+        return new ValidationResult().setPass(true).setMessage("验证通过").setData(data);
     }
 
     public static ValidationResult createFailValidationResult(String message) {

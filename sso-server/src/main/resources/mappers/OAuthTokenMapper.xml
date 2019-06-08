@@ -6,6 +6,7 @@
     <resultMap id="baseResultMap" type="lewiszlw.sso.server.entity.OAuthTokenEntity">
         <id column="id" property="id"/>
         <result column="client_id" property="clientId" />
+        <result column="user_id" property="userId" />
         <result column="type" property="type" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
         <result column="token" property="token" />
         <result column="expired_at" property="expiredAt"/>
@@ -15,7 +16,7 @@
     </resultMap>
 
     <sql id="baseColumns" >
-        client_id, `type`, token, expired_at, status, created_time, updated_time
+        client_id, user_id, `type`, token, expired_at, status, created_time, updated_time
     </sql>
 
     <insert id="insertOne" parameterType="lewiszlw.sso.server.entity.OAuthTokenEntity">
@@ -24,6 +25,7 @@
         values
         (
         #{oauthTokenEntity.clientId},
+        #{oauthTokenEntity.userId},
         #{oauthTokenEntity.type, typeHandler=org.apache.ibatis.type.EnumTypeHandler},
         #{oauthTokenEntity.token},
         #{oauthTokenEntity.expiredAt},

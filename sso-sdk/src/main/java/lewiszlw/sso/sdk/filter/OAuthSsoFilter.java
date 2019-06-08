@@ -5,6 +5,7 @@ import lewiszlw.sso.sdk.handler.SsoUriHandler;
 import lewiszlw.sso.sdk.handler.impl.*;
 import lewiszlw.sso.sdk.util.SsoUtils;
 import lewiszlw.sso.sdk.util.WebUtils;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +51,11 @@ public class OAuthSsoFilter extends AbstractSsoFilter {
         if (cookie != null) {
             // TODO 暂时认为有cookie就已登录
             return true;
+        }
+        // cookie 没有则检查 header
+        String accessToken = request.getHeader(Constants.ACCESS_TOKEN_HEADER_NAME);
+        if (!StringUtils.isEmpty(accessToken)) {
+            // TODO 验证token
         }
         return false;
     }

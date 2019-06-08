@@ -2,9 +2,11 @@ package lewiszlw.sso.server.service;
 
 import lewiszlw.sso.server.constant.Constants;
 import lewiszlw.sso.server.constant.OAuthTokenType;
+import lewiszlw.sso.server.constant.TokenStatus;
 import lewiszlw.sso.server.convertor.OAuthTokenConverter;
 import lewiszlw.sso.server.entity.OAuthTokenEntity;
 import lewiszlw.sso.server.mapper.OAuthTokenMapper;
+import lewiszlw.sso.server.model.ValidationResult;
 import lewiszlw.sso.server.model.req.AccessTokenReq;
 import lewiszlw.sso.server.model.resp.AccessTokenResp;
 import lewiszlw.sso.server.util.TokenUtils;
@@ -25,30 +27,46 @@ public class OAuthSerivce {
     @Autowired
     private OAuthTokenMapper oauthTokenMapper;
 
-    public String genCode(String clientId) {
+    /**
+     * 生成code
+     */
+    public String genCode(String clientId, Integer userId) {
         String code = TokenUtils.createCode();
         OAuthTokenEntity oauthTokenEntity = OAuthTokenConverter
-                .convertToOAuthTokenEntity(OAuthTokenType.CODE, clientId, code, Constants.STATUS_VALID);
+                .convertToValidOAuthTokenEntity(clientId, userId, OAuthTokenType.CODE, code);
         oauthTokenMapper.insertOne(oauthTokenEntity);
         return code;
     }
 
-    public boolean validateCode(String code) {
-        OAuthTokenEntity oAuthTokenEntity = oauthTokenMapper.selectByTokenAndType(code, OAuthTokenType.CODE);
+    /**
+     * 判断token/code是否过期
+     */
+    public ValidationResult validateToken(String token, OAuthTokenType type) {
+        OAuthTokenEntity oAuthTokenEntity = oauthTokenMapper.selectByTokenAndType(token, type);
         if (oAuthTokenEntity == null) {
-            return false;
+            return ValidationResult.createFailValidationResult("token不存在");
         }
-        return oAuthTokenEntity.getExpiredAt().after(new Date());
+        if (oAuthTokenEntity.getExpiredAt().after(new Date())
+                && TokenStatus.VALID.getStatus() == oAuthTokenEntity.getStatus()) {
+            return ValidationResult.createPassValidationResult(oAuthTokenEntity);
+        }
+        return ValidationResult.createFailValidationResult("token过期");
     }
 
+    /**
+     * 申请access token
+     */
     public AccessTokenResp applyAccessToken(AccessTokenReq req) {
+        // 根据code获取userId
+        OAuthTokenEntity oAuthTokenEntity = oauthTokenMapper.selectByTokenAndType(req.getCode(), OAuthTokenType.CODE);
+        Integer userId = oAuthTokenEntity.getUserId();
         // 生成access token 和 refresh token
         String accessToken = TokenUtils.createAccessToken();
         OAuthTokenEntity accessOAuthTokenEntity = OAuthTokenConverter
-                .convertToOAuthTokenEntity(OAuthTokenType.ACCESS_TOKEN, req.getClientId(), accessToken, Constants.STATUS_VALID);
+                .convertToValidOAuthTokenEntity(req.getClientId(), userId, OAuthTokenType.ACCESS_TOKEN, accessToken);
         String refreshToken = TokenUtils.createRefreshToken();
         OAuthTokenEntity refreshOAuthTokenEntity = OAuthTokenConverter
-                .convertToOAuthTokenEntity(OAuthTokenType.REFRESH_TOKEN, req.getClientId(), refreshToken, Constants.STATUS_VALID);
+                .convertToValidOAuthTokenEntity(req.getClientId(), userId, OAuthTokenType.REFRESH_TOKEN, refreshToken);
         oauthTokenMapper.insertOne(accessOAuthTokenEntity);
         oauthTokenMapper.insertOne(refreshOAuthTokenEntity);
         // 过期code
@@ -57,5 +75,19 @@ public class OAuthSerivce {
                 .setAccessToken(accessToken)
                 .setExpiresIn(Constants.ACCESS_TOKEN_VALID_TIME)
                 .setRefreshToken(refreshToken);
+    }
+
+    /**
+     * 登录成功后申请access token
+     */
+    public String applyAccessTokenForLoginSuccess(Integer userId) {
+        if (userId == null) {
+            return null;
+        }
+        String accessToken = TokenUtils.createAccessToken();
+        OAuthTokenEntity accessOAuthTokenEntity = OAuthTokenConverter
+                .convertToValidOAuthTokenEntity(null, userId, OAuthTokenType.ACCESS_TOKEN, accessToken);
+        oauthTokenMapper.insertOne(accessOAuthTokenEntity);
+        return accessToken;
     }
 }

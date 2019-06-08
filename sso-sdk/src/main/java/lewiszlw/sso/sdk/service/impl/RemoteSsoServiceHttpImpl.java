@@ -48,4 +48,9 @@ public class RemoteSsoServiceHttpImpl implements RemoteSsoService {
     public UserDTO getUser(String accessToken) {
         return null;
     }
+
+    @Override
+    public boolean validateAccessToken(String accessToken) {
+        return false;
+    }
 }

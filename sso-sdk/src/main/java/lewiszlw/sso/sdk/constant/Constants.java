@@ -27,4 +27,8 @@ public class Constants {
     public static final int SOCKET_TIMEOUT = 5 * 1000;
     public static final int CONNECT_TIMEOUT = 2 * 1000;
 
+    /**
+     * request header中token名称
+     */
+    public static final String ACCESS_TOKEN_HEADER_NAME = "access-token";
 }
