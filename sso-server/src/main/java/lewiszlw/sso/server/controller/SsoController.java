@@ -62,6 +62,9 @@ public class SsoController {
         // 判断是否已登录
         ValidationResult validationResult = ssoService.validateLogin(request);
         if (validationResult.isPass()) {
+            // TODO 判断是否从授权页面跳转过来，是则不带code
+            // 授权页面redirectUri不加host
+
             // 已登录，直接生成code进行跳转
             OAuthTokenEntity oAuthTokenEntity = (OAuthTokenEntity) validationResult.getData();
             String code = oauthSerivce.genCode(clientId, oAuthTokenEntity.getUserId());

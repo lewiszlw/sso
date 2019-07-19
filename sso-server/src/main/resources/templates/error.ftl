@@ -6,7 +6,7 @@
 <body>
 <div align="center">
     <h2>Error!</h2>
-    <p>${error!}</p>
+    <p style="color: red">${error!}</p>
 </div>
 </body>
 </html>

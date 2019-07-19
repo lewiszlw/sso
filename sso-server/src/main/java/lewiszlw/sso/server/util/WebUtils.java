@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  */
 public class WebUtils {
 
-    public static String generateRedirectUri(String redirectUri, String code, String state) {
+    public static String genOAuthRedirectUri(String redirectUri, String code, String state) {
         StringBuilder sb = new StringBuilder(redirectUri);
         sb.append("?code=").append(code);
         if (!StringUtils.isEmpty(state)) {
